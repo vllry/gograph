@@ -1,5 +1,11 @@
 package gograph
 
 type Edge struct {
-	attr map[string]string
+	attributes map[string]string
+}
+
+func NewEdge() Edge {
+	return Edge{
+		attributes: make(map[string]string),
+	}
 }
