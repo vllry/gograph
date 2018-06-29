@@ -21,6 +21,19 @@ func TestInsertVertex(t *testing.T) {
 	}
 }
 
+func TestAttributes(t *testing.T) {
+	key := "ping"
+	value := "pong"
+
+	v := NewVertex("attr test")
+	v.SetAttribute(key, value)
+
+	actual, _ := v.GetAttribute(key)
+	if actual != value {
+		t.Error(fmt.Sprintf("Expected attributed %s:%s, got %s:%s", key, value, key, actual))
+	}
+}
+
 func TestSimpleAdjacentVertices(t *testing.T) {
 	v1 := NewVertex("1")
 	v2 := NewVertex("2")

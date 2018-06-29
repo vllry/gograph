@@ -16,15 +16,24 @@ func NewVertex(id string) Vertex {
 	}
 }
 
-func (v1 *Vertex) Adjacent(v2 *Vertex) {
-	v1.adjacentTo[v2.id] = v2
-	v2.adjacentTo[v1.id] = v1
+func (v *Vertex) Adjacent(v2 *Vertex) {
+	v.adjacentTo[v2.id] = v2
+	v2.adjacentTo[v.id] = v
 
-	e := NewEdge()
-	v1.edges[v2.id] = &e
-	v2.edges[v1.id] = &e
+	e := NewEdge(v, v2)
+	v.edges[v2.id] = &e
+	v2.edges[v.id] = &e
 }
 
 func (v *Vertex) GetAdjacent() map[string]*Vertex {
 	return v.adjacentTo
+}
+
+func (v *Vertex) SetAttribute(key string, value string) {
+	v.attributes[key] = value
+}
+
+func (v *Vertex) GetAttribute(key string) (string, error) {
+	value := v.attributes[key]  // TODO handle errors
+	return value, nil
 }
