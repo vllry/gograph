@@ -20,18 +20,71 @@ func TestInsertVertex(t *testing.T) {
 	}
 }
 
-func TestAdjacentVertices(t *testing.T) {
+func TestSimpleAdjacentVertices(t *testing.T) {
 	v1 := NewVertex("1")
 	v2 := NewVertex("2")
-	v1.adjacent(&v2)
 
-	eq := reflect.DeepEqual(v1.getAdjacent(), map[string]*Vertex{"2": &v2})
+	v1.Adjacent(&v2)
+
+	eq := reflect.DeepEqual(v1.GetAdjacent(), map[string]*Vertex{"2": &v2})
 	if !eq {
-		t.Error("v1 did not have expected adjacent vertices")
+		t.Error("v1 did not have expected Adjacent vertices")
+	}
+	eq = reflect.DeepEqual(v2.GetAdjacent(), map[string]*Vertex{"1": &v1})
+	if !eq {
+		t.Error("v2 did not have expected Adjacent vertices")
+	}
+}
+
+func TestComplexAdjacentVertices(t *testing.T) {
+	v1 := NewVertex("1")
+	v2 := NewVertex("2")
+	v3 := NewVertex("3")
+	v4 := NewVertex("4")
+
+	v1.Adjacent(&v2)
+	v1.Adjacent(&v3)
+	v2.Adjacent(&v3)
+	v1.Adjacent(&v4)
+
+	var tests = []struct {
+		vertex  *Vertex
+		adjacent map[string]*Vertex
+	}{
+		{
+			&v1,
+			map[string]*Vertex{
+				"2": &v2,
+				"3": &v3,
+				"4": &v4,
+			},
+		},
+		{
+			&v2,
+			map[string]*Vertex{
+				"1": &v1,
+				"3": &v3,
+			},
+		},
+		{
+			&v3,
+			map[string]*Vertex{
+				"1": &v1,
+				"2": &v2,
+			},
+		},
+		{
+			&v4,
+			map[string]*Vertex{
+				"1": &v1,
+			},
+		},
 	}
 
-	eq = reflect.DeepEqual(v2.getAdjacent(), map[string]*Vertex{"1": &v1})
-	if !eq {
-		t.Error("v2 did not have expected adjacent vertices")
+	for _, testCase := range tests {
+		eq := reflect.DeepEqual(testCase.vertex.GetAdjacent(), testCase.adjacent)
+		if !eq {
+			t.Error("v did not have expected adjacent vertices")
+		}
 	}
 }

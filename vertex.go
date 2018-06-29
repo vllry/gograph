@@ -16,7 +16,7 @@ func NewVertex(id string) Vertex {
 	}
 }
 
-func (v1 *Vertex) adjacent(v2 *Vertex) {
+func (v1 *Vertex) Adjacent(v2 *Vertex) {
 	v1.adjacentTo[v2.id] = v2
 	v2.adjacentTo[v1.id] = v1
 
@@ -25,6 +25,6 @@ func (v1 *Vertex) adjacent(v2 *Vertex) {
 	v2.edges[v1.id] = &e
 }
 
-func (v *Vertex) getAdjacent() map[string]*Vertex {
+func (v *Vertex) GetAdjacent() map[string]*Vertex {
 	return v.adjacentTo
 }
