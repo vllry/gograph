@@ -3,6 +3,7 @@ package gograph
 import (
 	"reflect"
 	"testing"
+	"fmt"
 )
 
 func TestNewVertex(t *testing.T) {
@@ -81,10 +82,10 @@ func TestComplexAdjacentVertices(t *testing.T) {
 		},
 	}
 
-	for _, testCase := range tests {
-		eq := reflect.DeepEqual(testCase.vertex.GetAdjacent(), testCase.adjacent)
+	for _, test := range tests {
+		eq := reflect.DeepEqual(test.vertex.GetAdjacent(), test.adjacent)
 		if !eq {
-			t.Error("v did not have expected adjacent vertices")
+			t.Error(fmt.Sprintf("%s did not have expected adjacent vertices", test.vertex.id))
 		}
 	}
 }
