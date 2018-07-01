@@ -10,10 +10,26 @@ func NewGraph() Graph {
 	}
 }
 
-func (g *Graph) add(v *Vertex) {
-	g.vertexSet[v.id] = v
+func (g *Graph) Vertex(id string) *Vertex {
+	v := Vertex{
+		id:         id,
+		attributes: make(map[string]string),
+		adjacentTo: make(map[string]*Vertex),
+		edges:      make(map[string]*Edge),
+	}
+	g.vertexSet[v.id] = &v
+
+	return &v
 }
 
-func (g *Graph) vertices() map[string]*Vertex {
+func (g *Graph) Vertices() map[string]*Vertex {
 	return g.vertexSet
+}
+
+func (g *Graph) VertexIds() []string {
+	ids := make([]string, 0)
+	for id := range g.Vertices() {
+		ids = append(ids, id)
+	}
+	return ids
 }
