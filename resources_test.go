@@ -50,3 +50,19 @@ func complexGraph1() Graph {
 
 	return g
 }
+
+/*func vertexIdsFromSlice(vertices []*Vertex) []string {
+	ids := make([]string, len(vertices))
+	for index, v := range vertices {
+		ids[index] = v.id
+	}
+	return ids
+}
+
+func vertexIdsFromMap(vertices map[string]*Vertex) []string {
+	ids := make([]string, len(vertices))
+	for vid := range vertices {
+		ids = append(ids, vid)
+	}
+	return ids
+}*/

@@ -2,22 +2,20 @@ package gograph
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
-func TestShortestPath(t *testing.T) {
+func TestPathExists(t *testing.T) {
 	g := complexGraph1()
 	vertices := g.Vertices()
 
-	path := g.ShortestPath(vertices["0"], vertices["20"])
-	pathIds := make([]string, len(path))
-	for _, v := range path {
-		pathIds = append(pathIds, v.id)
+	path := g.PathExists(vertices["0"], vertices["20"])
+	if !path {
+		t.Error(fmt.Sprintf("Expecting to find a path from 0 to 20"))
 	}
 
-	expected := []string{"0", "20"}
-	if !reflect.DeepEqual(pathIds, expected) {
-		t.Error(fmt.Sprintf("Got incorrect shortest path: %s", pathIds))
+	path = g.PathExists(vertices["0"], vertices["12"])
+	if path {
+		t.Error(fmt.Sprintf("Not expecting to find a path from 0 to 13"))
 	}
 }
