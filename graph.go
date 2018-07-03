@@ -26,6 +26,10 @@ func (g *Graph) Vertices() map[string]*Vertex {
 	return g.vertexSet
 }
 
+func (g *Graph) Order() int {
+	return len(g.vertexSet)
+}
+
 func (g *Graph) VertexIds() []string {
 	ids := make([]string, 0)
 	for id := range g.Vertices() {

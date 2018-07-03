@@ -19,3 +19,10 @@ func TestPathExists(t *testing.T) {
 		t.Error(fmt.Sprintf("Not expecting to find a path from 0 to 13"))
 	}
 }
+
+func TestShortest(t *testing.T) {
+	g := complexGraph1()
+	vertices := g.Vertices()
+
+	g.ShortestPath(vertices["0"], vertices["20"])
+}
