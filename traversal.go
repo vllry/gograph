@@ -1,10 +1,8 @@
 package gograph
 
-import "fmt"
-
 /*
 BFS implementation.
-O(|V(G)| + |V(E)|)
+O(|V(G)| + |V(E)|) time
 Slightly cheaper than Dijkstra's algorithm when simply checking for connectivity.
 */
 func (g *Graph) PathExists(u *Vertex, v *Vertex) bool {
@@ -41,58 +39,60 @@ func (g *Graph) PathExists(u *Vertex, v *Vertex) bool {
 Dijkstra's algorithm - goto for cheapest paths.
 https://en.wikipedia.org/wiki/Dijkstra's_algorithm
 */
-func (g *Graph) ShortestPath(start *Vertex, target *Vertex) []*Vertex {
+func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
 	maxDistance := int(^uint(0) >> 1) // Max int
 	queue := make([]*Vertex, 0)
 	prev := make(map[string]*Vertex, 0)
-	distances := make(map[string]int)
+	costs := make(map[string]int)
 
 	// Initialize tracking info for vertices.
 	for _, v := range g.Vertices() {
 		prev[v.id] = nil
-		distances[v.id] = maxDistance
+		costs[v.id] = maxDistance
 		queue = append(queue, v)
 	}
-	distances[start.id] = 0
+	costs[start.id] = 0
 
 	for len(queue) != 0 {
 		// Find the closest vertex in the queue.
+		// A priority queue would be faster than a for-loop.
 		var closest *Vertex
 		var closestIndex int
 		for index, v := range queue {
-			if closest == nil || distances[v.id] < distances[closest.id] {
+			if closest == nil || costs[v.id] < costs[closest.id] {
 				closest = v
 				closestIndex = index
 			}
 		}
-		fmt.Println("dequeueing", closest.id)
-		queue = append(queue[:closestIndex], queue[closestIndex+1:]...)
+		queue = append(queue[:closestIndex], queue[closestIndex+1:]...) // Remove that element from the queue.
 
 		for _, v := range closest.GetAdjacent() {
-			alt := distances[closest.id] + 1 // +1 is the cost of the edge
-			if alt < distances[v.id] {
-				distances[v.id] = alt
+			alt := costs[closest.id] + 1 // +1 is the cost of the edge
+			if alt < costs[v.id] {
+				costs[v.id] = alt
 				prev[v.id] = closest
 			}
 		}
 	}
 
-	fmt.Println("path assembly")
-
 	// Re-assemble cheapest reversePath from cost data.
 	var reversePath []*Vertex
 	tail := target
-	for tail.id != start.id {
-		fmt.Println("reverse path", tail.id)
+	for prev[tail.id] != nil {
 		reversePath = append(reversePath, tail)
 		tail = prev[tail.id] // Move closer to the source
 	}
-	fmt.Println("Path reversal")
+	if len(reversePath) != 0 { // Loop returns before reaching the start vetex.
+		reversePath = append(reversePath, start)
+	}
+
+	// Reverse the path to reflect traversal order.
 	path := make([]*Vertex, len(reversePath))
 	for index, v := range reversePath {
-		fmt.Println(v.id)
 		path[len(reversePath)-1-index] = v
 	}
 
-	return reversePath
+	cheaptestCost := costs[target.id]
+
+	return reversePath, cheaptestCost
 }
