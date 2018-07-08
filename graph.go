@@ -10,15 +10,23 @@ func NewGraph() *Graph {
 	}
 }
 
-func (g *Graph) Vertex(id string) *Vertex {
-	v := Vertex{
-		id:         id,
-		attributes: make(map[string]string),
-		adjacentTo: make(map[string]*Vertex),
-		edges:      make(map[string]*Edge),
-	}
-	g.vertexSet[v.id] = &v
+func (g *Graph) Copy() *Graph {
+	h := NewGraph()
 
+	// Copy vertices.
+	for _, v := range g.vertexSet {
+		u := v.copyWithoutAdjacency()
+		h.vertexSet[u.id] = &u
+	}
+
+	// Link vertices
+
+	return h
+}
+
+func (g *Graph) Vertex(id string) *Vertex {
+	v := newVertex(id)
+	g.vertexSet[v.id] = &v
 	return &v
 }
 
