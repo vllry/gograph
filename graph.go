@@ -19,7 +19,19 @@ func (g *Graph) Copy() *Graph {
 		h.vertexSet[u.id] = &u
 	}
 
-	// Link vertices
+	// Link vertices.
+	for _, v := range g.vertexSet {
+		for _, vAdj := range v.GetAdjacent() {
+			if h.vertexSet[v.id].GetAdjacent()[vAdj.id] == nil { // Only link if not already linked.
+				h.vertexSet[v.id].Adjacent(
+					h.vertexSet[vAdj.id],
+				)
+				h.vertexSet[v.id].edges[vAdj.id].conformTo(
+					v.edges[vAdj.id],
+				)
+			}
+		}
+	}
 
 	return h
 }

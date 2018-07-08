@@ -22,7 +22,9 @@ func TestPathExists(t *testing.T) {
 }
 
 func TestShortest(t *testing.T) {
-	g := complexGraph1()
+	h := complexGraph1()
+	g := h.Copy()
+
 	v := g.Vertices()
 
 	var path []*Vertex

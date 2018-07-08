@@ -20,6 +20,10 @@ func newEdge(v1 *Vertex, v2 *Vertex) Edge {
 	}
 }
 
+func (e *Edge) conformTo(e2 *Edge) {
+	e.attributes = e2.attributes
+}
+
 func (e *Edge) GetIncident() (*Vertex, *Vertex) {
 	return e.verticesSlice[0], e.verticesSlice[1]
 }

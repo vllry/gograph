@@ -104,7 +104,11 @@ func TestComplexAdjacentVertices(t *testing.T) {
 
 func TestK5(t *testing.T) {
 	k5 := k(5)
-	vertexMap := k5.Vertices()
+	ensureComplete(k5, t)
+}
+
+func ensureComplete(g *Graph, t *testing.T) {
+	vertexMap := g.Vertices()
 
 	for vid, v := range vertexMap {
 		var expected = map[string]*Vertex{}
