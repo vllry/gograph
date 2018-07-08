@@ -4,7 +4,7 @@ import (
 	"strconv"
 )
 
-func k(order int) Graph {
+func k(order int) *Graph {
 	g := NewGraph()
 
 	var vertices = make([]*Vertex, 0)
@@ -20,7 +20,7 @@ func k(order int) Graph {
 	return g
 }
 
-func complexGraph1() Graph {
+func complexGraph1() *Graph {
 	g := NewGraph()
 	v := make(map[string]*Vertex, 21)
 

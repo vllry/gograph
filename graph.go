@@ -4,8 +4,8 @@ type Graph struct {
 	vertexSet map[string]*Vertex
 }
 
-func NewGraph() Graph {
-	return Graph{
+func NewGraph() *Graph {
+	return &Graph{
 		vertexSet: make(map[string]*Vertex),
 	}
 }
