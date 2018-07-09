@@ -100,7 +100,7 @@ func (g *Graph) CheapestPath(start *Vertex, target *Vertex, weightAttribute stri
 
 	cheapestCost := costs[target.id]
 
-	return reversePath, cheapestCost
+	return path, cheapestCost
 }
 
 func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
