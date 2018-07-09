@@ -35,16 +35,16 @@ func (e *Edge) SetIntAttribute(key string, value int) {
 	e.intAttributes[key] = value
 }
 
-func (e *Edge) GetIntAttribute(key string) (int, error) {
-	value := e.intAttributes[key]
-	return value, nil
+func (e *Edge) GetIntAttribute(key string) (int, bool) {
+	value, found := e.intAttributes[key]
+	return value, found
 }
 
 func (e *Edge) SetStringAttribute(key string, value string) {
 	e.stringAttributes[key] = value
 }
 
-func (e *Edge) GetStringAttribute(key string) (string, error) {
-	value := e.stringAttributes[key]
-	return value, nil
+func (e *Edge) GetStringAttribute(key string) (string, bool) {
+	value, found := e.stringAttributes[key]
+	return value, found
 }

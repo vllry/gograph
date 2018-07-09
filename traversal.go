@@ -39,7 +39,7 @@ func (g *Graph) PathExists(u *Vertex, v *Vertex) bool {
 Dijkstra's algorithm - goto for cheapest paths.
 https://en.wikipedia.org/wiki/Dijkstra's_algorithm
 */
-func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
+func (g *Graph) CheapestPath(start *Vertex, target *Vertex, weightAttribute string, defaultWeight int) ([]*Vertex, int) {
 	maxDistance := int(^uint(0) >> 1) // Max int
 	queue := make([]*Vertex, 0)
 	prev := make(map[string]*Vertex, 0)
@@ -67,9 +67,15 @@ func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
 		queue = append(queue[:closestIndex], queue[closestIndex+1:]...) // Remove that element from the queue.
 
 		for _, v := range closest.GetAdjacent() {
-			alt := costs[closest.id] + 1 // +1 is the cost of the edge
-			if alt < costs[v.id] {
-				costs[v.id] = alt
+			// Load the specific edge weight (or default).
+			edgeWeight, found := closest.edges[v.id].GetIntAttribute(weightAttribute)
+			if found == false {
+				edgeWeight = defaultWeight
+			}
+
+			altCost := costs[closest.id] + edgeWeight
+			if altCost < costs[v.id] {
+				costs[v.id] = altCost
 				prev[v.id] = closest
 			}
 		}
@@ -92,7 +98,11 @@ func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
 		path[len(reversePath)-1-index] = v
 	}
 
-	cheaptestCost := costs[target.id]
+	cheapestCost := costs[target.id]
 
-	return reversePath, cheaptestCost
+	return reversePath, cheapestCost
+}
+
+func (g *Graph) ShortestPath(start *Vertex, target *Vertex) ([]*Vertex, int) {
+	return g.CheapestPath(start, target, "", 1)
 }

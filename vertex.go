@@ -53,7 +53,7 @@ func (v *Vertex) SetAttribute(key string, value string) {
 	v.attributes[key] = value
 }
 
-func (v *Vertex) GetAttribute(key string) (string, error) {
-	value := v.attributes[key] // TODO handle errors
-	return value, nil
+func (v *Vertex) GetAttribute(key string) (string, bool) {
+	value, found := v.attributes[key]
+	return value, found
 }
