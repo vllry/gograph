@@ -21,12 +21,18 @@ func TestAttributes(t *testing.T) {
 	value := "pong"
 
 	g := NewGraph()
-	v := g.Vertex("attr test")
+	v := g.Vertex("test")
 	v.SetAttribute(key, value)
 
 	actual, _ := v.GetAttribute(key)
 	if actual != value {
 		t.Error(fmt.Sprintf("Expected attributed %s:%s, got %s:%s", key, value, key, actual))
+	}
+
+	h := g.Copy()
+	actual, _ = h.Vertices()["test"].GetAttribute(key)
+	if actual != value {
+		t.Error(fmt.Sprintf("Expected copied attributed %s:%s, got %s:%s", key, value, key, actual))
 	}
 }
 
