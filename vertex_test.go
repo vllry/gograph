@@ -16,7 +16,7 @@ func TestInsertVertex(t *testing.T) {
 	}
 }
 
-func TestAttributes(t *testing.T) {
+func TestVertexAttributes(t *testing.T) {
 	key := "ping"
 	value := "pong"
 
@@ -26,13 +26,13 @@ func TestAttributes(t *testing.T) {
 
 	actual, _ := v.GetAttribute(key)
 	if actual != value {
-		t.Error(fmt.Sprintf("Expected attributed %s:%s, got %s:%s", key, value, key, actual))
+		t.Error(fmt.Sprintf("Expected attribute %s:%s, got %s:%s", key, value, key, actual))
 	}
 
 	h := g.Copy()
 	actual, _ = h.Vertices()["test"].GetAttribute(key)
 	if actual != value {
-		t.Error(fmt.Sprintf("Expected copied attributed %s:%s, got %s:%s", key, value, key, actual))
+		t.Error(fmt.Sprintf("Expected copied attribute %s:%s, got %s:%s", key, value, key, actual))
 	}
 }
 
