@@ -21,7 +21,6 @@ func (v *Vertex) Adjacent(v2 *Vertex) *Edge {
 // Copies a vertex, without adjacency information.
 func (v *Vertex) copyWithoutAdjacency() Vertex {
 	u := newVertex(v.id)
-
 	u.attributes = v.attributes
 
 	return u
@@ -35,6 +34,10 @@ func newVertex(id string) Vertex {
 		edges:      make(map[string]*Edge),
 	}
 	return v
+}
+
+func (v *Vertex) Edges() map[string]*Edge {
+	return v.edges
 }
 
 func (v *Vertex) GetAdjacent() map[string]*Vertex {

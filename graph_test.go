@@ -21,3 +21,8 @@ func TestBasicCopy(t *testing.T) {
 	}
 	ensureComplete(h, t)
 }
+
+func TestGraph_Components(t *testing.T) {
+	g := complexGraph2()
+	g.Components()
+}

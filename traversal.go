@@ -11,7 +11,6 @@ func (g *Graph) PathExists(u *Vertex, v *Vertex) bool {
 
 	for len(queue) != 0 {
 		// Don't double queue
-		// Still having trouble queueing v5
 		current := queue[0]
 		queue = queue[1:]
 		if visitedMap[current.id] != nil {
@@ -29,7 +28,6 @@ func (g *Graph) PathExists(u *Vertex, v *Vertex) bool {
 				queue = append(queue, w)
 			}
 		}
-
 	}
 
 	return false

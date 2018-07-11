@@ -1,5 +1,7 @@
 package gograph
 
+import "fmt"
+
 type Graph struct {
 	vertexSet map[string]*Vertex
 }
@@ -10,13 +12,16 @@ func NewGraph() *Graph {
 	}
 }
 
+func (g *Graph) copyVertex(v *Vertex) {
+	u := v.copyWithoutAdjacency()
+	g.vertexSet[u.id] = &u
+}
+
 func (g *Graph) Copy() *Graph {
 	h := NewGraph()
 
-	// Copy vertices.
 	for _, v := range g.vertexSet {
-		u := v.copyWithoutAdjacency()
-		h.vertexSet[u.id] = &u
+		h.copyVertex(v)
 	}
 
 	// Link vertices.
@@ -56,4 +61,43 @@ func (g *Graph) VertexIds() []string {
 		ids = append(ids, id)
 	}
 	return ids
+}
+
+func (g *Graph) Components() []*Graph {
+	components := make([]*Graph, 0)
+
+	// Perform a BFS-like walk of the graph.
+	toVisit := g.Vertices()
+
+	for len(toVisit) != 0 {
+		component := NewGraph() // Each loop happens once per component.
+
+		var firstVertex *Vertex
+		for _, firstVertex = range toVisit { // Hacky way to get "any old key" from the map.
+			break
+		}
+
+		// Perform a BFS until no more vertices are accessible. Add found vertices to the component.
+		visitQueue := []*Vertex{firstVertex}
+		for len(visitQueue) != 0 {
+			current := visitQueue[0]
+			visitQueue = visitQueue[1:]
+
+			// Log a newly found vertex as being "in this component", update BFS accordingly.
+			if _, present := component.Vertices()[current.id]; present == false {
+				delete(toVisit, current.id)
+				component.copyVertex(current)
+				for _, v := range current.GetAdjacent() {
+					visitQueue = append(visitQueue, v)
+				}
+			}
+		}
+
+		// TODO: Add edges
+
+		fmt.Println(component.Order())
+		components = append(components, component)
+	}
+
+	return components
 }
