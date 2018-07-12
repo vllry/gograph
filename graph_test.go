@@ -24,5 +24,24 @@ func TestBasicCopy(t *testing.T) {
 
 func TestGraph_Components(t *testing.T) {
 	g := complexGraph2()
-	g.Components()
+	components := g.Components()
+
+	expectedComponents := 2
+	actualComponents := len(components)
+	if expectedComponents != actualComponents {
+		t.Error(fmt.Sprintf("Expected %d components, got %d", expectedComponents, actualComponents))
+	}
+
+	componentA, componentB := components[0], components[1]
+	smallComponent := componentA
+	bigComponent := componentB
+	if componentB.Order() < componentA.Order() {
+		smallComponent = componentB
+		bigComponent = componentA
+	}
+
+	if smallComponent.Order() != 4 || bigComponent.Order() != 19 {
+		t.Error(fmt.Sprintf("Expected component sizes of %d and %d - got %d and %d",
+			4, 19, smallComponent.Order(), bigComponent.Order()))
+	}
 }

@@ -22,6 +22,7 @@ func newEdge(v1 *Vertex, v2 *Vertex) Edge {
 	}
 }
 
+// Update attributes to be the same as e2.
 func (e *Edge) conformTo(e2 *Edge) {
 	e.intAttributes = e2.intAttributes
 	e.stringAttributes = e2.stringAttributes

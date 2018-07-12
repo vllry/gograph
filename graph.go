@@ -70,6 +70,7 @@ func (g *Graph) Components() []*Graph {
 	toVisit := g.Vertices()
 
 	for len(toVisit) != 0 {
+		fmt.Println("Populating component.")
 		component := NewGraph() // Each loop happens once per component.
 
 		var firstVertex *Vertex
@@ -85,7 +86,8 @@ func (g *Graph) Components() []*Graph {
 
 			// Log a newly found vertex as being "in this component", update BFS accordingly.
 			if _, present := component.Vertices()[current.id]; present == false {
-				delete(toVisit, current.id)
+				toVisit[current.id] = nil
+				delete(toVisit, current.id) // FIXME Delete is deleting the actual values from the graph
 				component.copyVertex(current)
 				for _, v := range current.GetAdjacent() {
 					visitQueue = append(visitQueue, v)
@@ -93,7 +95,18 @@ func (g *Graph) Components() []*Graph {
 			}
 		}
 
-		// TODO: Add edges
+		// Now that all vertices are present, add all relevant edges.
+		for _, v := range component.Vertices() {
+			fmt.Println(g.Vertices())
+			fmt.Println(component.Vertices())
+			for _, adjInParent := range g.Vertices()[v.id].GetAdjacent() {
+				adjInComponent, inComponent := component.Vertices()[adjInParent.id]
+				if inComponent == true {
+					e := v.Adjacent(adjInComponent)
+					e.conformTo(adjInParent.Edges()[v.id])
+				}
+			}
+		}
 
 		fmt.Println(component.Order())
 		components = append(components, component)

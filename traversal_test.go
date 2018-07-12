@@ -31,12 +31,14 @@ func TestGraph_ShortestPath(t *testing.T) {
 	var cost int
 
 	path, cost = g.ShortestPath(v["0"], v["20"])
-	expectedPath := []*Vertex{v["0"], v["3"], v["5"], v["14"], v["16"], v["19"], v["20"]}
+	expectedPathA := []*Vertex{v["0"], v["3"], v["5"], v["14"], v["15"], v["19"], v["20"]}
+	expectedPathB := []*Vertex{v["0"], v["3"], v["5"], v["14"], v["16"], v["19"], v["20"]}
 	expectedCost := 6
-	if !reflect.DeepEqual(path, expectedPath) {
+	if !reflect.DeepEqual(path, expectedPathA) && !reflect.DeepEqual(path, expectedPathB) {
 		t.Error(fmt.Sprintf(
-			"Failed to find expected path from 0 to 20. Wanted %s, got %s",
-			pathToString(expectedPath),
+			"Failed to find expected path from 0 to 20. Wanted %s or %s, got %s",
+			pathToString(expectedPathA),
+			pathToString(expectedPathB),
 			pathToString(path),
 		))
 	}
