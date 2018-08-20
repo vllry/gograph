@@ -44,4 +44,13 @@ func TestGraph_Components(t *testing.T) {
 		t.Error(fmt.Sprintf("Expected component sizes of %d and %d - got %d and %d",
 			4, 19, smallComponent.Order(), bigComponent.Order()))
 	}
+
+	// Test on k1.
+	k := k(1)
+	components = k.Components()
+	expectedComponents = 1
+	actualComponents = len(components)
+	if expectedComponents != actualComponents {
+		t.Error(fmt.Sprintf("Expected %d components, got %d", expectedComponents, actualComponents))
+	}
 }

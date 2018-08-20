@@ -1,7 +1,5 @@
 package gograph
 
-import "fmt"
-
 type Graph struct {
 	vertexSet map[string]*Vertex
 }
@@ -65,29 +63,24 @@ func (g *Graph) VertexIds() []string {
 
 func (g *Graph) Components() []*Graph {
 	components := make([]*Graph, 0)
+	inComponent := make(map[string]bool, 0)
 
-	// Perform a BFS-like walk of the graph.
-	toVisit := g.Vertices()
-
-	for len(toVisit) != 0 {
-		fmt.Println("Populating component.")
+	for _, firstVertexInComponent := range g.Vertices() {
+		if inComponent[firstVertexInComponent.id] == true {
+			continue
+		}
+		// Reaching here means firstVertexInComponent is in a to-be-discovered component.
 		component := NewGraph() // Each loop happens once per component.
 
-		var firstVertex *Vertex
-		for _, firstVertex = range toVisit { // Hacky way to get "any old key" from the map.
-			break
-		}
-
 		// Perform a BFS until no more vertices are accessible. Add found vertices to the component.
-		visitQueue := []*Vertex{firstVertex}
+		visitQueue := []*Vertex{firstVertexInComponent}
 		for len(visitQueue) != 0 {
 			current := visitQueue[0]
 			visitQueue = visitQueue[1:]
 
 			// Log a newly found vertex as being "in this component", update BFS accordingly.
 			if _, present := component.Vertices()[current.id]; present == false {
-				toVisit[current.id] = nil
-				delete(toVisit, current.id) // FIXME Delete is deleting the actual values from the graph
+				inComponent[current.id] = true
 				component.copyVertex(current)
 				for _, v := range current.GetAdjacent() {
 					visitQueue = append(visitQueue, v)
@@ -95,10 +88,8 @@ func (g *Graph) Components() []*Graph {
 			}
 		}
 
-		// Now that all vertices are present, add all relevant edges.
+		// Now that all vertices are present, re-add all relevant edges from g.
 		for _, v := range component.Vertices() {
-			fmt.Println(g.Vertices())
-			fmt.Println(component.Vertices())
 			for _, adjInParent := range g.Vertices()[v.id].GetAdjacent() {
 				adjInComponent, inComponent := component.Vertices()[adjInParent.id]
 				if inComponent == true {
@@ -108,7 +99,6 @@ func (g *Graph) Components() []*Graph {
 			}
 		}
 
-		fmt.Println(component.Order())
 		components = append(components, component)
 	}
 
